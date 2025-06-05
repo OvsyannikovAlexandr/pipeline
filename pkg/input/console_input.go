@@ -3,6 +3,7 @@ package input
 import (
 	"bufio"
 	"fmt"
+	"log"
 	"os"
 	"strconv"
 	"strings"
@@ -17,16 +18,21 @@ func ReadFromConsole(out chan<- int) {
 
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		log.Printf("[Input] Ввод: %s", line)
+
 		if line == "exit" {
+			log.Println("[Input] Завершение ввода по команде 'exit'")
 			break
 		}
 
 		num, err := strconv.Atoi(line)
 		if err != nil {
-			fmt.Println("⚠️ Введите целое число или 'exit' для выхода.")
+			log.Printf("[Input] !!! Нецелочисленный ввод: %s", line)
+			fmt.Println("!!! Введите целое число или 'exit' для выхода.")
 			continue
 		}
 
+		log.Printf("[Input] Отправка числа в конвейер: %d", num)
 		out <- num
 	}
 
